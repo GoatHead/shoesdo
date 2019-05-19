@@ -1,0 +1,11 @@
+.Header {
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.post-header{
+    float:left;
+}
+.post-header-center {
+    align-content: center;
+}
