@@ -43,10 +43,10 @@ class App extends Component {
     };
 
     memoExpired() {
-        const { data } = this.state;
+        const {data} = this.state;
         let resList = [];
-        for ( let record of data[0] ) {
-            const { notifyDate } = record;
+        for (let record of data[0]) {
+            const {notifyDate} = record;
             let tDate = new Date(notifyDate.replace(/-/g, '/'));
             let now = new Date();
             if (tDate < now) {
@@ -59,18 +59,22 @@ class App extends Component {
     memoSortingRandom() {
         const data = this.state.data;
         let nextData = [];
-        for (let dataPart of data) {
-            let nextRecords = [];
-            const outerIndex = data.indexOf(dataPart);
-            for (let record of dataPart) {
-                const index = dataPart.indexOf(record);
-                const random = Math.floor(Math.random() * 100);
-                const nextRecord = update(record, {
-                    order: {$set: random}
-                });
-                nextRecords = [...nextRecords, nextRecord];
+        try {
+            for (let dataPart of data) {
+                let nextRecords = [];
+                const outerIndex = data.indexOf(dataPart);
+                for (let record of dataPart) {
+                    const index = dataPart.indexOf(record);
+                    const random = Math.floor(Math.random() * 100);
+                    const nextRecord = update(record, {
+                        order: {$set: random}
+                    });
+                    nextRecords = [...nextRecords, nextRecord];
+                }
+                nextData = [...nextData, nextRecords]
             }
-            nextData = [...nextData, nextRecords]
+        } catch (e) {
+            return
         }
         this.setState({
             data: update(this.state.data, {
@@ -274,7 +278,7 @@ class App extends Component {
         } else if (draggedPost.order < droppedPost.order) { // Dropped 된 포스트가 더 아래에 있음(order 값이 더 큼)
             ele = update(droppedRecord, {
                 order: {
-                    $set: droppedPost.order -1
+                    $set: droppedPost.order - 1
                 }
             });
             recordPieces = [...recordPieces, ele];
