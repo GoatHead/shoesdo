@@ -304,7 +304,7 @@ class App extends Component {
 
     memoClear() {
         this.setState({
-            data: [,]
+            data: [ [],[] ]
         });
     }
     ;
