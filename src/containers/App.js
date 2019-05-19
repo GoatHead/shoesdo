@@ -18,9 +18,9 @@ class App extends Component {
         }
         this.state = {
             data: [
-                (dataWithDate ? dataWithDate : [])
+                (dataWithDate !== "undefined" ? dataWithDate : [])
                 ,
-                (dataWithoutDate ? dataWithoutDate : [])
+                (dataWithoutDate !== "undefined" ? dataWithoutDate : [])
             ],
             draggedPost: {
                 order: 0,
@@ -93,9 +93,14 @@ class App extends Component {
         const array_type = isDateExist ? 0 : 1; // 0: 날짜 존재 1: 날짜 미존재
         inputObj['title'] = inputObj['title'].slice(0, 20);
         const _id = crypto.randomBytes(20).toString('hex');
-        const _order = (this.state.data[array_type]
-            ? this.state.data[array_type].length
-            : 0);
+        let _order = 0;
+        if (this.state.data[array_type] === 'undefined') {
+            _order = 0;
+        } else {
+            _order = (this.state.data[array_type].length > 0
+                ? Math.max(...this.state.data[array_type].map(data => data.order)) + 1
+                : 0);
+        }
         const pushObj = update(inputObj, {
             id: {$set: _id},
             order: {$set: _order}

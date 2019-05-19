@@ -24,8 +24,8 @@ class Header extends Component {
     }
 
     handleCanDragAlram = () => {
-        alert('포스트잇을 드래그하면 우선순위를 조절할 수 있어요!');
-    }
+        alert('포스트잇을 드래그하면 우선순위를 조절할 수 있어요!\n(로직은 완성됐지만 렌더링으론 구현이 덜되어 새로고침까지 해야 적용됩니다...');
+    };
 
     handleMemoDelete = () => {
         const id = this.props.id;
@@ -68,9 +68,6 @@ class Header extends Component {
         }
         return true;
     };
-
-    componentWillReceiveProps(nextProps, nextContext) {
-    }
 
     handleEdit = () => {
         const {id, content, notifyDate} = this.props;

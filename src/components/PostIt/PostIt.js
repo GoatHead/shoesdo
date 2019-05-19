@@ -71,6 +71,7 @@ class PostIt extends Component {
             order,
             align
         };
+        console.log(dragObj);
         e.dataTransfer.setData("dragPost", JSON.stringify(dragObj));
     };
 

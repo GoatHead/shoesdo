@@ -11,32 +11,15 @@ class PostItContainer extends Component {
         super(props);
         this.state = {
             type: this.props.align, // left or right
-            data: this.props.data
         };
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        const { data } = nextProps;
-        if (data !== undefined) {
-            data.sort((order1, order2) => {
-                return order1.order - order2.order;
-            });
-            this.setState({
-                data: data,
-            });
-        } else {
-            this.setState({
-                data: []
-            })
-        }
-    };
-
     render() {
-        const { data } = this.state;
+        const { data } = this.props;
         if (!Array.isArray(data)) {
             return "";
         }
-        const generatePostIt = this.state.data.sort((orderA, orderB) => orderA.order - orderB.order)
+        const generatePostIt = data.sort((orderA, orderB) => orderA.order - orderB.order)
             .map((data, i) => {
                 return (<PostIt
                     id={data.id}
