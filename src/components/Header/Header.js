@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import WriteBox from "../WriteBox/WriteBox";
-import { memoWriteBtnToggle } from '../../actions/memo'
+import {memoWriteBtnToggle} from '../../actions/memo'
 import {connect} from "react-redux";
 
 const propTypes = {};
@@ -19,18 +19,16 @@ class Header extends Component {
 
     handleMemoExpired() {
         const expiredList = this.props.memoExpired();
-        if (expiredList === undefined) {
-            return
+        if (!Array.isArray(expiredList)) {
+            return;
         }
-        console.log(expiredList);
-        if (!(expiredList.length > 0)) {
-            return
+        if (expiredList.length > 0) {
+            let resStr = "[마감 TODO 체크]\n";
+            for (let record of expiredList) {
+                resStr += `제목: ${record.title}는 마감되었습니다. 마감시간: ${record.notifyDate}\n`;
+            }
+            alert(resStr);
         }
-        let resStr = "[마감 TODO 체크]\n";
-        for (let record of expiredList) {
-            resStr += `제목: ${record.title}는 마감되었습니다. 마감시간: ${record.notifyDate}\n`;
-        }
-        alert(resStr);
     }
 
     render() {
