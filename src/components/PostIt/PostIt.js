@@ -47,7 +47,9 @@ class PostIt extends Component {
         this.handleOnDrop = this.handleOnDrop.bind(this);
         this.handleOnDragOver = this.handleOnDragOver.bind(this);
     }
-
+    /*
+        스위치에 핸들링된 함수입니다.
+    */
     handleChangeChk = () => {
         this.setState({
             isChecked: !this.state.isChecked
@@ -56,7 +58,9 @@ class PostIt extends Component {
         const isDateExist = (notifyDate !== "");
         this.props.memoCheckedToggle(id, isDateExist);
     };
-
+/*
+    마감기한이 지났는지 검사하는 함수입니다.
+*/
     isDatePassed() {
         let targetDate = this.props.notifyDate;
         if (!targetDate) return false;
@@ -64,7 +68,14 @@ class PostIt extends Component {
         let now = new Date();
         return (tDate < now);
     }
-
+/*
+    아래는 드래그 기능을 위한 함수들입니다.
+    이벤트 객체에 데이터를 저장하고
+    드래그하는 포스트와
+    드래그 되는 포스트(드랍되는 포스트)의 정보를 쌍으로 묶어 인자로 삼아
+    App.js의 함수에서 처리하여 각 포스트 객체의 order 값 정렬을 시키는데 성공하였습니다.
+    하지만 의도대로 렌더링되지 않아 새로고침 없이 정렬하는데는 실패하였습니다.
+*/
     handleOnDrag = (e, postit) => {
         const {order, align}= postit.props;
         const dragObj = {

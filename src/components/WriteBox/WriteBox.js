@@ -38,7 +38,10 @@ class WriteBox extends Component {
         });
     };
 
-
+/*
+    글쓰기 기능을 담당하는 함수입니다.
+    실제 구현은 App.js에 되어있고, 이 함수에서는 입력되는 데이터들이 타당한지를 검사하는게 주기능입니다.
+ */
     handleWrite() {
         const regEx = /^\d{4}-\d{2}-\d{2}$/;
         const now = new Date().toISOString().substring(0, 10);

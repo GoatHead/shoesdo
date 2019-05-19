@@ -23,10 +23,18 @@ class Header extends Component {
         this.handleCanDragAlram = this.handleCanDragAlram .bind(this);
     }
 
+    /*
+        포스트잇 왼쪽 상단의 버튼에 핸들링되어 드래그 방법을 설명해주는 함수입니다.
+        원래는 해당 버튼을 드래그하면 포스트잇 박스가 따라나오고, 드래그 앤 드롭으로
+        우선순위 설정과 정렬까지 진행하는게 목표였습니다.
+     */
     handleCanDragAlram = () => {
         alert('포스트잇을 드래그하면 우선순위를 조절할 수 있어요!\n(로직은 완성됐지만 렌더링으론 구현이 덜되어 새로고침까지 해야 적용됩니다...');
     };
 
+    /*
+        메모 삭제 버튼과 연동된 함수
+     */
     handleMemoDelete = () => {
         const id = this.props.id;
         const isDateExist = (this.props.notifyDate !== "");
@@ -39,6 +47,9 @@ class Header extends Component {
             [name]: value
         });
     };
+    /*
+        입력값의 타당성 검사를 위한 함수입니다.
+     */
     checkInputValidate = (title, content ,notifyTime) => {
         const regEx = /^\d{4}-\d{2}-\d{2}$/;
         if (title === "") {
@@ -68,7 +79,11 @@ class Header extends Component {
         }
         return true;
     };
-
+    /*
+            포스트잇 수정을 위한 함수입니다.
+            이 함수는 1. 수정 창을 연다. 2. 수정 창을 닫을 때 해당 포스트잇 내용을 업데이트한다.
+            라는 두 가지 기능이 있습니다.
+        */
     handleEdit = () => {
         const {id, content, notifyDate} = this.props;
         const isDateExist = (notifyDate !== "");

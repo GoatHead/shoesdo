@@ -8,6 +8,19 @@ class App extends Component {
 
     constructor(props) {
         super(props);
+/*
+    생성자에서는 로컬 스토리지에서 데이터를 불러옵니다.
+    data의 명세는 다음과 같습니다.
+    [
+    [{ id, title, content, modifyDate, notifyDate, endedWork, order }, {... } ...],
+     [{... }, {... } ...]
+    ]
+    notifyDate가 있으면 배열의 첫번째 원소로, 없으면 두번째 원소로 들어가게 됩니다.
+    id는 글을 작성할 때 crypto.randomByte를 이용하여 생성되어 고유한 값을 가지게 됩니다.
+    order는 표시되는 포스트잇의 순서(우선순위) 기능을 위한 속성입니다.
+    endedWork는 완료된 작업을 체크하기 위한 속성입니다.
+    나머지는 영어명과 동일한 표현을 직관적으로 담당합니다.
+*/
         let dataWithDate = localStorage.getItem('datawithdate');
         let dataWithoutDate = localStorage.getItem('data');
         if (dataWithDate !== "undefined") {
@@ -41,7 +54,9 @@ class App extends Component {
         this.memoSortingRandom = this.memoSortingRandom.bind(this);
         this.memoExpired = this.memoExpired.bind(this)
     };
-
+/*
+마감 기한이 지났는지를 확인하는 함수입니다.
+ */
     memoExpired() {
         const {data} = this.state;
         let resList = [];
@@ -58,7 +73,9 @@ class App extends Component {
         }
         return resList
     }
-
+/*
+    포스트를 섞는 함수입니다. 상단의 '섞기' 버튼과 연계되어 있습니다. 테스트용입니다.
+ */
     memoSortingRandom() {
         const data = this.state.data;
         let nextData = [];
@@ -86,7 +103,10 @@ class App extends Component {
         });
         console.log('포스트잇이 섞였다.');
     }
-
+/*
+    컴포넌트가 업데이트 되었을 때
+    로컬 스토리지에 현재까지 작성한 포스트잇을 저장합니다.
+ */
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.data[0] !== this.state.data[0]) {
             localStorage.datawithdate = JSON.stringify(this.state.data[0]);
@@ -95,7 +115,10 @@ class App extends Component {
             localStorage.data = JSON.stringify(this.state.data[1]);
         }
     }
-
+/*
+    메모 작성 함수입니다.
+    react-uppdate-addons를 이용하여 state를 업데이트합니다.
+ */
     memoWrite(inputObj, isDateExist = false) {
         const array_type = isDateExist ? 0 : 1; // 0: 날짜 존재 1: 날짜 미존재
         inputObj['title'] = inputObj['title'].slice(0, 20);
@@ -120,7 +143,10 @@ class App extends Component {
             })
         });
     }
-
+    /*
+        데이터를 집어넣는 테스트용 함수입니다.
+        상단의 테스트 버튼과 연결되어있습니다.
+     */
     memoTest() {
         const data1 = [{
             id: '0',
@@ -239,7 +265,13 @@ class App extends Component {
         });
     }
     ;
-
+    /*
+        드래그해서 우선순위를 만들어내는 함수입니다.
+        각 PostIt의 데이터를 담당하는 객체 내부의 order 속성에 따라 포스트가 정렬되어 렌더링됩니다.
+        따라서 저는 order 속성 값을 드래그를 통해 변경시켜준다면 순서대로 렌더링 할 수 있다고 생각하여 작업하였습니다.
+        로직은 성공적이었지만, 렌더링이 의도한대로 진행되지는 않았습니다.
+        결국 드래그를 한 후 새로고침을 해야 적용됩니다.
+     */
     memoDrag(draggedPost, droppedPost) {
         if (draggedPost.align !== droppedPost.align) {
             console.error("두 요소의 align 값이 같지 않습니다.");
@@ -302,13 +334,18 @@ class App extends Component {
         })
     };
 
+    /*
+        포스트잇을 모두 제거하는 함수입니다.
+     */
     memoClear() {
         this.setState({
             data: [ [],[] ]
         });
     }
     ;
-
+    /*
+        포스트잇 수정을 위해 이용되는 함수입니다.
+     */
     memoUpdate(id, inputObj, isDateExist) {
         const array_type = isDateExist ? 0 : 1;
         const record = this.state.data[array_type].filter(record => record.id === id)[0];
@@ -329,6 +366,9 @@ class App extends Component {
         });
     }
 
+    /*
+        포스트잇 삭제를 위한 함수입니다.
+     */
     memoDelete(id, isDateExist) {
         const array_type = isDateExist ? 0 : 1;
         const record = this.state.data[array_type].filter(record => record.id === id)[0];
@@ -341,7 +381,11 @@ class App extends Component {
             })
         });
     }
-
+    /*
+        '완료 표시'를 위한 함수입니다.
+        각 포스트잇의 스위치는 PostIt 객체 내부의 endedWork와 연동되어 있습니다.
+        따라서 완료된 작업들은 스위치가 켜진 상태이며, 또한 endedWork가 true로 적용되게 됩니다.
+     */
     memoCheckedToggle(id, isDateExist) {
         const array_type = isDateExist ? 0 : 1;
         const record = this.state.data[array_type].filter(record => record.id === id)[0];

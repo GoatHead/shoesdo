@@ -17,6 +17,9 @@ class Header extends Component {
         this.handleMemoExpired = this.handleMemoExpired.bind(this)
     }
 
+    /*
+        상단의 알람버튼을 핸들링하여 기능을 구현한 함수입니다.
+    */
     handleMemoExpired() {
         const expiredList = this.props.memoExpired();
         if (!Array.isArray(expiredList)) {

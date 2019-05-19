@@ -10,7 +10,7 @@ class PostItContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: this.props.align, // left or right
+            type: this.props.align, // left or right. 포스트잇 컨테이너(래퍼)의 위치를 설정합니다.
         };
     }
 
@@ -19,6 +19,9 @@ class PostItContainer extends Component {
         if (!Array.isArray(data)) {
             return "";
         }
+        /*
+            컨테이너 내부의 포스트잇들을 정렬&생성하는 렌더링용 함수입니다.
+         */
         const generatePostIt = data.sort((orderA, orderB) => orderA.order - orderB.order)
             .map((data, i) => {
                 return (<PostIt
