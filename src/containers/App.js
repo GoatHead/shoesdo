@@ -101,7 +101,7 @@ class App extends Component {
         inputObj['title'] = inputObj['title'].slice(0, 20);
         const _id = crypto.randomBytes(20).toString('hex');
         let _order = 0;
-        if (this.state.data[array_type] === 'undefined') {
+        if (!Array.isArray(this.state.data[array_type])) {
             _order = 0;
         } else {
             _order = (this.state.data[array_type].length > 0
