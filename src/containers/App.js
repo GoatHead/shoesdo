@@ -45,6 +45,12 @@ class App extends Component {
     memoExpired() {
         const {data} = this.state;
         let resList = [];
+        if (data[0] === undefined) {
+            return
+        }
+        if (!(data[0].length > 0)) {
+            return
+        }
         for (let record of data[0]) {
             const {notifyDate} = record;
             let tDate = new Date(notifyDate.replace(/-/g, '/'));

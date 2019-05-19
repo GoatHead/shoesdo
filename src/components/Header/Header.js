@@ -19,7 +19,11 @@ class Header extends Component {
 
     handleMemoExpired() {
         const expiredList = this.props.memoExpired();
-        if (expiredList === "undefined") {
+        if (expiredList === undefined) {
+            return
+        }
+        console.log(expiredList);
+        if (!(expiredList.length > 0)) {
             return
         }
         let resStr = "[마감 TODO 체크]\n";
