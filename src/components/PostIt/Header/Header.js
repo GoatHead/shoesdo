@@ -20,6 +20,11 @@ class Header extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleMemoDelete = this.handleMemoDelete.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleCanDragAlram = this.handleCanDragAlram .bind(this);
+    }
+
+    handleCanDragAlram = () => {
+        alert('포스트잇을 드래그하면 우선순위를 조절할 수 있어요!');
     }
 
     handleMemoDelete = () => {
@@ -64,6 +69,9 @@ class Header extends Component {
         return true;
     };
 
+    componentWillReceiveProps(nextProps, nextContext) {
+    }
+
     handleEdit = () => {
         const {id, content, notifyDate} = this.props;
         const isDateExist = (notifyDate !== "");
@@ -92,7 +100,8 @@ class Header extends Component {
             <div className='Header'>
                 <div className="post-header">
                     <a className="waves-light btn-floating btn-small"><i
-                        className="small material-icons">reorder</i></a>
+                        className="small material-icons"
+                        onClick={this.handleCanDragAlram}>reorder</i></a>
                 </div>
                 <div className="title post-header post-header-center">
                     {this.props.isEditing

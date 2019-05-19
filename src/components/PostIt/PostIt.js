@@ -6,7 +6,6 @@ import './Footer.css'
 
 const propTypes = {
     id: PropTypes.string,
-    key: PropTypes.string,
     title: PropTypes.string,
     content: PropTypes.string,
     modifyDate: PropTypes.string,
@@ -15,6 +14,7 @@ const propTypes = {
     memoDelete: PropTypes.func,
     memoUpdate: PropTypes.func,
     memoCheckedToggle: PropTypes.func,
+    memoDrag: PropTypes.func,
     align: PropTypes.string,
     order: PropTypes.number
 };
@@ -32,6 +32,7 @@ class PostIt extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            title: this.props.title,
             content: this.props.content,
             notifyDate: this.props.notifyDate,
             isChecked: this.props.endedWork,
@@ -65,11 +66,23 @@ class PostIt extends Component {
     }
 
     handleOnDrag = (e, postit) => {
-        e.preventDefault();
+        const {order, align}= postit.props;
+        const dragObj = {
+            order,
+            align
+        };
+        e.dataTransfer.setData("dragPost", JSON.stringify(dragObj));
     };
 
-    handleOnDrop = (e) => {
+    handleOnDrop = (e, postit) => {
         e.preventDefault();
+        const dragged = JSON.parse(e.dataTransfer.getData("dragPost"));
+        const {order, align}= postit.props;
+        const dropped = {
+            order,
+            align
+        };
+        this.props.memoDrag(dragged, dropped);
     };
 
     handleOnDragOver = (e) => {
@@ -97,16 +110,16 @@ class PostIt extends Component {
         return (
                 <div className="s12"
                     draggable
-                     onDrag={ e => this.handleOnDrag(e, this) }
-                     onDrop = {e => this.handleOnDrop(e)}
-                     onDragOver={ e => this.handleOnDragOver(e)}
+                     onDragStart={e => this.handleOnDrag(e, this)}
+                     onDragOver={(event) => this.handleOnDragOver(event)}
+                     onDrop = {e => this.handleOnDrop(e, this)}
                 >
                     <div className="card small white darken-1">
                         {/*Header*/}
                         <Header
                             id={this.props.id}
                             notifyDate={this.state.notifyDate}
-                            title={this.props.title}
+                            title={this.state.title}
                             content={this.state.content}
                             onToggleEditmode={this.changeEdit}
                             isEditing={this.state.isEditing}

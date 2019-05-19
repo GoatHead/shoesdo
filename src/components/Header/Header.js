@@ -14,6 +14,19 @@ const defaultProps = {
 class Header extends Component {
     constructor(props) {
         super(props);
+        this.handleMemoExpired = this.handleMemoExpired.bind(this)
+    }
+
+    handleMemoExpired() {
+        const expiredList = this.props.memoExpired();
+        if (expiredList === "undefined") {
+            return
+        }
+        let resStr = "[마감 TODO 체크]\n";
+        for (let record of expiredList) {
+            resStr += `제목: ${record.title}는 마감되었습니다. 마감시간: ${record.notifyDate}\n`;
+        }
+        alert(resStr);
     }
 
     render() {
@@ -24,12 +37,15 @@ class Header extends Component {
                         <label><Link to="/" className="brand-logo center">SHOESDO</Link></label>
 
                         <ul>
-                            <li><a><i className="material-icons">notifications</i></a></li>
+                            <li><a
+                                onClick={this.handleMemoExpired}
+                            ><i className="material-icons">notifications</i></a></li>
                         </ul>
 
                         <div className="right">
                             <ul>
-                                <li><a onClick={this.props.onTest}>테스트</a></li>
+                                <li><a onClick={this.props.onTest}>데이터 생성</a></li>
+                                <li><a onClick={this.props.onSortingRandom}>포스트잇 섞기</a></li>
                                 <li><a onClick={this.props.onWrite}><i className="material-icons">create</i></a></li>
                                 <li><a onClick={this.props.onClear}><i className="material-icons">clear_all</i></a></li>
                                 {/*<li><a><i className="material-icons">vpn_key</i></a></li>*/}

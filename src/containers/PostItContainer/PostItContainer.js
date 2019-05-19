@@ -33,12 +33,13 @@ class PostItContainer extends Component {
 
     render() {
         const { data } = this.state;
-        let generatePostIt;
-        if (Array.isArray(data)) {
-            generatePostIt = this.state.data.map((data, i) => {
+        if (!Array.isArray(data)) {
+            return "";
+        }
+        const generatePostIt = this.state.data.sort((orderA, orderB) => orderA.order - orderB.order)
+            .map((data, i) => {
                 return (<PostIt
                     id={data.id}
-                    key={data.id}
                     title={data.title}
                     content={data.content}
                     modifyDate={data.modifyDate}
@@ -49,13 +50,9 @@ class PostItContainer extends Component {
                     memoCheckedToggle={this.props.memoCheckedToggle}
                     order={data.order}
                     align={this.props.align}
-                    memoDrag={this.memoDrag}
+                    memoDrag={this.props.memoDrag}
                 />)
             });
-        }
-        else {
-            generatePostIt = "";
-        }
         return (
             <div className={`col s6 ${this.props.align}`}>
                 <div className="center title teal z-depth-1 post-container">

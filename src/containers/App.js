@@ -38,11 +38,47 @@ class App extends Component {
         this.memoClear = this.memoClear.bind(this);
         this.memoTest = this.memoTest.bind(this);
         this.memoDrag = this.memoDrag.bind(this);
+        this.memoSortingRandom = this.memoSortingRandom.bind(this);
+        this.memoExpired = this.memoExpired.bind(this)
     };
 
-    memoSorting(data) {
-        update(data, {});
-    };
+    memoExpired() {
+        const { data } = this.state;
+        let resList = [];
+        for ( let record of data[0] ) {
+            const { notifyDate } = record;
+            let tDate = new Date(notifyDate.replace(/-/g, '/'));
+            let now = new Date();
+            if (tDate < now) {
+                resList = [...resList, record]
+            }
+        }
+        return resList
+    }
+
+    memoSortingRandom() {
+        const data = this.state.data;
+        let nextData = [];
+        for (let dataPart of data) {
+            let nextRecords = [];
+            const outerIndex = data.indexOf(dataPart);
+            for (let record of dataPart) {
+                const index = dataPart.indexOf(record);
+                const random = Math.floor(Math.random() * 100);
+                const nextRecord = update(record, {
+                    order: {$set: random}
+                });
+                nextRecords = [...nextRecords, nextRecord];
+            }
+            nextData = [...nextData, nextRecords]
+        }
+        this.setState({
+            data: update(this.state.data, {
+                $set: nextData
+            })
+        });
+        console.log('포스트잇이 섞였다.');
+    }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.data[0] !== this.state.data[0]) {
@@ -75,82 +111,112 @@ class App extends Component {
 
     memoTest() {
         const data1 = [{
-            id: 0,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '0',
+            title: "1번 메모",
+            content: " " +
+                "않은 헤는 나는 봅니다. 딴은 내린 언덕 계십니다. " +
+                "위에 다하지 않은 내린 토끼, 청춘이 가슴속에 까닭입니다. " +
+                "파란 이웃 하나 별 하나에 하나에 까닭입니다.",
             modifyDate: "2019-01-01",
             notifyDate: "2020-01-04",
             endedWork: true,
             order: 0
         }, {
-            id: 1,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '1',
+            title: "2번 메모",
+            content: "너무나 때 언덕 프랑시스 다하지 청춘이 책상을 버리었습니다. " +
+                " " +
+                "위에 다하지 않은 내린 토끼, 청춘이 가슴속에 까닭입니다. " +
+                "파란 이웃 하나 별 하나에 하나에 까닭입니다.",
             modifyDate: "2019-01-01",
             notifyDate: "2020-01-04",
             endedWork: true,
             order: 1
         }, {
-            id: 2,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '2',
+            title: "3번 메모",
+            content: "너무나 때 언덕 프랑시스 다하지 청춘이 책상을 버리었습니다. " +
+                "않은 헤는 나는 봅니다. 딴은 내린 언덕 계십니다. " +
+                "" +
+                "파란 이웃 하나 별 하나에 하나에 까닭입니다.",
             modifyDate: "2019-01-01",
-            notifyDate: "2020-01-04",
+            notifyDate: "2017-01-04",
             endedWork: true,
             order: 2
         }, {
-            id: 3,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '3',
+            title: "4번 메모",
+            content: "너무나 때 언덕 프랑시스 다하지 청춘이 책상을 버리었습니다. " +
+                "않은 헤는 나는 봅니다. 딴은 내린 언덕 계십니다. " +
+                "위에 다하지 않은 내린 토끼, 청춘이 가슴속에 까닭입니다. " +
+                "",
             modifyDate: "2019-01-01",
-            notifyDate: "2020-01-04",
+            notifyDate: "2018-12-04",
             endedWork: true,
             order: 3
         }, {
-            id: 4,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '4',
+            title: "5번 메모",
+            content: " " +
+                "않은 헤는 나는 봅니다. 딴은 내린 언덕 계십니다. " +
+                "위에 다하지 않은 내린 토끼, 청춘이 가슴속에 까닭입니다. " +
+                "파란 이웃 하나 별 하나에 하나에 까닭입니다.",
             modifyDate: "2019-01-01",
-            notifyDate: "2020-01-04",
+            notifyDate: "2030-12-04",
             endedWork: false,
             order: 4
         }];
         const data2 = [{
-            id: 0,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '0',
+            title: "1번 메모",
+            content: "너무나 때 언덕 프랑시스 다하지 청춘이 책상을 버리었습니다. " +
+                "" +
+                "위에 다하지 않은 내린 토끼, 청춘이 가슴속에 까닭입니다. " +
+                "파란 이웃 하나 별 하나에 하나에 까닭입니다.",
             modifyDate: "2019-01-01",
             notifyDate: "",
             endedWork: false,
             order: 0
         }, {
-            id: 1,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '1',
+            title: "2번 메모",
+            content: "너무나 때 언덕 프랑시스 다하지 청춘이 책상을 버리었습니다. " +
+                "않은 헤는 나는 봅니다. 딴은 내린 언덕 계십니다. " +
+                " " +
+                "파란 이웃 하나 별 하나에 하나에 까닭입니다.",
             modifyDate: "2019-01-01",
             notifyDate: "",
             endedWork: false,
             order: 1
         }, {
-            id: 2,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '2',
+            title: "3번 메모",
+            content: "너무나 때 언덕 프랑시스 다하지 청춘이 책상을 버리었습니다. " +
+                "않은 헤는 나는 봅니다. 딴은 내린 언덕 계십니다. " +
+                "위에 다하지 않은 내린 토끼, 청춘이 가슴속에 까닭입니다. " +
+                "",
             modifyDate: "2019-01-01",
             notifyDate: "",
             endedWork: true,
             order: 2
         }, {
-            id: 3,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '3',
+            title: "4번 메모",
+            content: "너무나 때 언덕 프랑시스 다하지 청춘이 책상을 버리었습니다. " +
+                "않은 헤는 나는 봅니다. 딴은 내린 언덕 계십니다. " +
+                "위에 다하지 않은 내린 토끼, 청춘이 가슴속에 까닭입니다. " +
+                "파란 이웃 하나 별 하나에 하나에 까닭입니다.",
             modifyDate: "2019-01-01",
             notifyDate: "",
             endedWork: true,
             order: 3
         }, {
-            id: 4,
-            title: "오늘 할 일",
-            content: "코딩",
+            id: '4',
+            title: "5번 메모",
+            content: "" +
+                "않은 헤는 나는 봅니다. 딴은 내린 언덕 계십니다. " +
+                "위에 다하지 않은 내린 토끼, 청춘이 가슴속에 까닭입니다. " +
+                "파란 이웃 하나 별 하나에 하나에 까닭입니다.",
             modifyDate: "2019-01-01",
             notifyDate: "",
             endedWork: false,
@@ -159,78 +225,77 @@ class App extends Component {
         this.setState({
             data: [data1, data2]
         });
-    };
+    }
+    ;
 
     memoDrag(draggedPost, droppedPost) {
-        if (!draggedPost.align !== droppedPost.align) {
+        if (draggedPost.align !== droppedPost.align) {
+            console.error("두 요소의 align 값이 같지 않습니다.");
+            return
+        }
+        if (draggedPost.order === droppedPost.order) {
+            console.error("두 포스트가 동일합니다.");
             return
         }
         const {align} = draggedPost;
         const array_type = (align === 'left' ? 0 : 1);
-        const droppedRecord = this.state.data[array_type].filter(record => record.order === droppedPost.order)[0];
-        const droppedIndex = this.state.data[array_type].indexOf(droppedRecord);
+        const data = this.state.data[array_type];
+        const droppedRecord = data.filter(record => record.order === droppedPost.order)[0];
         // 인덱스 구하기
-        const draggedRecord = this.state.data[array_type].filter(record => record.order === draggedPost.order)[0];
-        const draggedIndex = this.state.data[array_type].indexOf(draggedRecord);
+        const draggedRecord = data.filter(record => record.order === draggedPost.order)[0];
         // 인덱스 구하기
-        this.setState({
-            data: update(this.state.data, {
-                [array_type]: {
-                    [draggedIndex]: {
-                        order: {
-                            $set: droppedPost.order
-                        }
-                    }
-                }
-            })
+        let recordPieces = [];
+        let ele = update(draggedRecord, {
+            order: {
+                $set: droppedPost.order
+            }
         });
+        recordPieces = [...recordPieces, ele];
         // 드래그한 포스트의 순서 변경
         if (draggedPost.order > droppedPost.order) { // Droped 된 포스트가 더 위에 있음
-            const records = this.state.data[array_type].filter(record => record.order >= droppedPost.order && record.id !== draggedPost.id);
+            ele = update(droppedRecord, {
+                order: {
+                    $set: droppedPost.order + 1
+                }
+            });
+            recordPieces = [...recordPieces, ele];
+            const rawRecords = data.filter(record => (record.id !== draggedRecord.id) && (record.id !== droppedRecord.id));
+            const records = rawRecords.filter(record => (record.order > droppedPost.order) && (record.order <= draggedPost.order));
+            const untrackedRecords = rawRecords.filter(record => (record.order <= droppedPost.order) || (record.order > draggedPost.order));
             let pushRecords = records.map(d => update(d, {
                 order: {$set: d.order + 1}
             }));
-            for (let record of pushRecords) { // 순회하면서 state의 data 순서값 변경
-                const prevRecord = this.state.data[array_type].filter(r => r.id === record.id)[0];
-                const recordIndex = this.state.data[array_type].indexOf(prevRecord);
-                this.setState({
-                    data: update(this.state.data, {
-                        [array_type]: {
-                            [recordIndex]: {
-                                $set: record
-                            }
-                        }
-                    })
-                });
-            }
-        } else if (draggedPost.order < droppedPost.order) { // Dropped 된 포스트가 더 아래에 있음
-            const records = this.state.data[array_type].filter(
-                record => record.order > draggedPost.order && record.order <= droppedPost.order && record.id !== draggedPost.id
-            );
+            recordPieces = [...recordPieces, ...pushRecords, ...untrackedRecords];
+        } else if (draggedPost.order < droppedPost.order) { // Dropped 된 포스트가 더 아래에 있음(order 값이 더 큼)
+            ele = update(droppedRecord, {
+                order: {
+                    $set: droppedPost.order -1
+                }
+            });
+            recordPieces = [...recordPieces, ele];
+            const rawRecords = data.filter(record => record.id !== draggedRecord.id);
+            const records = rawRecords.filter(record => (record.order > draggedPost.order) && (record.order < droppedPost.order));
+            const untrackedRecords = rawRecords.filter(record => (record.order < draggedPost.order) || (record.order > droppedPost.order));
             let pushRecords = records.map(d => update(d, {
                 order: {$set: d.order - 1}
             }));
-            for (let record of pushRecords) { // 순회하면서 state의 data 순서값 변경
-                const prevRecord = this.state.data[array_type].filter(r => r.id === record.id)[0];
-                const recordIndex = this.state.data[array_type].indexOf(prevRecord);
-                this.setState({
-                    data: update(this.state.data, {
-                        [array_type]: {
-                            [recordIndex]: {
-                                $set: record
-                            }
-                        }
-                    })
-                });
-            }
+            recordPieces = [...recordPieces, ...pushRecords, ...untrackedRecords];
         }
+        this.setState({
+            data: update(this.state.data, {
+                [array_type]: {
+                    $set: recordPieces
+                }
+            })
+        })
     };
 
     memoClear() {
         this.setState({
             data: [,]
         });
-    };
+    }
+    ;
 
     memoUpdate(id, inputObj, isDateExist) {
         const array_type = isDateExist ? 0 : 1;
@@ -284,9 +349,11 @@ class App extends Component {
         return (
             <div className="App">
                 <Header
+                    memoExpired={this.memoExpired}
                     memoWrite={this.memoWrite}
                     onClear={this.memoClear}
                     onTest={this.memoTest}
+                    onSortingRandom={this.memoSortingRandom}
                 />
                 <div className="container row">
                     <PostItContainer
