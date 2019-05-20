@@ -31,9 +31,9 @@ class App extends Component {
         }
         this.state = {
             data: [
-                (dataWithDate !== "undefined" ? dataWithDate : [])
+                (Array.isArray(dataWithDate) ? dataWithDate : [])
                 ,
-                (dataWithoutDate !== "undefined" ? dataWithoutDate : [])
+                (Array.isArray(dataWithoutDate) ? dataWithoutDate : [])
             ],
             draggedPost: {
                 order: 0,
